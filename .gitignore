@@ -10,6 +10,8 @@
 
 # production
 /build
+index.css
+index.css.map
 
 # misc
 .DS_Store

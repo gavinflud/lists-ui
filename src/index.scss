@@ -1,0 +1,18 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+
+$color-1: #171e75ff;
+$color-2: #ed138fff;
+$color-3: #072E18;
+$color-4: #e8db1eff;
+$color-5: #1e9451ff;
+$color-6: #7D1A52;
+
+$primary: $color-1;
+$link: $color-2;
+$success: $color-5;
+$info: $color-3;
+$warning: $color-4;
+$danger: $color-6;
+
+@import "../node_modules/bulma/bulma.sass";

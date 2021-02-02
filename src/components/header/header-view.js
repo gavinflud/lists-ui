@@ -26,17 +26,23 @@ const Header = (props) => {
             <Link to="/boards" className="navbar-item">Boards</Link>
           </div>
 
-          {
-            props.user ? '' :
-                <div className="navbar-end">
-                  <div className="navbar-item">
-                    <div className="buttons">
-                      <Register functions={props.functions}/>
-                      <Login functions={props.functions}/>
-                    </div>
+          <div className="navbar-end">
+            {props.user ?
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">Gavin Flood</a>
+                  <div className="navbar-dropdown">
+                    <a className="navbar-item">Profile</a>
+                    <a className="navbar-item">Preferences</a>
+                  </div>
+                </div> :
+                <div className="navbar-item">
+                  <div className="buttons">
+                    <Register functions={props.functions}/>
+                    <Login functions={props.functions}/>
                   </div>
                 </div>
-          }
+            }
+          </div>
         </div>
       </nav>
   );

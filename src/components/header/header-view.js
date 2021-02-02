@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import Login from '../login/';
+import Register from '../register/';
 import './header.scss';
 
 /**
@@ -30,7 +31,7 @@ const Header = (props) => {
                 <div className="navbar-end">
                   <div className="navbar-item">
                     <div className="buttons">
-                      <span className="button is-link"><strong>Sign up</strong></span>
+                      <Register functions={props.functions}/>
                       <Login functions={props.functions}/>
                     </div>
                   </div>

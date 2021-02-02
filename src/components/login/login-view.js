@@ -28,19 +28,20 @@ const Login = (props) => {
 
               <div className="field">
                 <label className="label">Email</label>
-                <div className="control">
-                  <input className="input" type="text" name="username"
-                         value={props.username}
+                <div className="control has-icons-left">
+                  <input className="input" type="text" name="username" placeholder="Email" value={props.username}
                          onChange={props.functions.handleChange}/>
+                  <span className="icon is-small is-left"><i className="fas fa-envelope"></i></span>
                 </div>
               </div>
 
               <div className="field">
                 <label className="label">Password</label>
-                <div className="control">
-                  <input className="input" type="password" name="password"
+                <div className="control has-icons-left">
+                  <input className="input" type="password" name="password" placeholder="Password"
                          value={props.password}
                          onChange={props.functions.handleChange}/>
+                  <span className="icon is-small is-left"><i className="fas fa-lock"></i></span>
                 </div>
               </div>
             </section>

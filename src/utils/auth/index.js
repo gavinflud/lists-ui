@@ -90,7 +90,7 @@ const auth = {
           return Promise.resolve(response.data.accessToken);
         })
         .catch((error) => {
-          this.deleteTokens();
+          auth.deleteTokens();
           return Promise.reject(error);
         });
   },

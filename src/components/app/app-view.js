@@ -1,6 +1,7 @@
 import './app.scss';
 import {BrowserRouter} from 'react-router-dom';
 import Header from '../header/';
+import Footer from '../footer/';
 
 /**
  * The root application view.
@@ -10,8 +11,8 @@ const App = (props) => {
       <div className="app">
         <BrowserRouter>
           <Header user={props.user} functions={props.functions}/>
-          {/*<Content/>
-        <Footer/>*/}
+          {/*<Content/>*/}
+          <Footer/>
         </BrowserRouter>
       </div>
   );

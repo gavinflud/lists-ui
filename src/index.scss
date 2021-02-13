@@ -19,3 +19,31 @@ $footer-background-color: none;
 $footer-padding: 2rem;
 
 @import "../node_modules/bulma/bulma.sass";
+
+html, body, #root {
+  height: 100%;
+}
+
+h1 {
+  font-size: $size-1;
+}
+
+h2 {
+  font-size: $size-2;
+}
+
+h3 {
+  font-size: $size-3;
+}
+
+h1 {
+  font-size: $size-4;
+}
+
+h2 {
+  font-size: $size-5;
+}
+
+h3 {
+  font-size: $size-6;
+}

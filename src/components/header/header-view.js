@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import Login from '../login/';
 import Register from '../register/';
+import Search from '../form/search';
 import './header.scss';
 
 /**
@@ -8,7 +9,7 @@ import './header.scss';
  */
 const Header = (props) => {
   return (
-      <header>
+      <header className="gf-header">
         <nav className="navbar is-primary" role="navigation">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item li-logo">Lists</Link>
@@ -22,12 +23,21 @@ const Header = (props) => {
           </div>
 
           <div id="main-navbar" className="navbar-menu">
-            <div className="navbar-start">
-              <Link to="/teams" className="navbar-item">Teams</Link>
-              <Link to="/boards" className="navbar-item">Boards</Link>
-            </div>
+            {props.user ?
+                <div className="navbar-start">
+                  <Link to="/teams" className="navbar-item">Teams</Link>
+                  <Link to="/boards" className="navbar-item">Boards</Link>
+                </div> :
+                ''
+            }
 
             <div className="navbar-end">
+              {props.user ?
+                  <div className="navbar-item">
+                    <Search/>
+                  </div> :
+                  ''
+              }
               {props.user ?
                   <div className="navbar-item has-dropdown is-hoverable">
                     <a className="navbar-link">Gavin Flood</a>

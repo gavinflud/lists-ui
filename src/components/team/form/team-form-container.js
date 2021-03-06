@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import TeamForm from './team-form-view';
 import {RequestType, sendRequest} from '../../../utils/http';
 
@@ -49,13 +50,14 @@ class TeamFormContainer extends React.Component {
   /**
    * Try to create/update the team.
    *
-   * TODO: Change to react-router redirecting
+   * TODO: Handle error in creating team
+   * TODO: Handle updating and creating
    */
   submitForm = () => {
     this.toggleLoading()
         .then(() => sendRequest(RequestType.POST, '/teams', null, this.state.form, true))
         .then(this.toggleLoading)
-        .then(() => window.location.replace('/'));
+        .then(() => this.props.history.push('/'));
   };
 
   /**
@@ -71,4 +73,4 @@ class TeamFormContainer extends React.Component {
   }
 }
 
-export default TeamFormContainer;
+export default withRouter(TeamFormContainer);

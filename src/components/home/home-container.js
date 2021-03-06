@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import Home from './home-view';
 import HomeUnauthenticated from './home-unauthenticated-view';
 
@@ -16,4 +17,4 @@ class HomeContainer extends React.Component {
   }
 }
 
-export default HomeContainer;
+export default withRouter(HomeContainer);

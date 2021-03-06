@@ -1,5 +1,6 @@
 import {Route, Switch} from 'react-router-dom';
 import Home from '../home';
+import TeamForm from '../team/form';
 import './content.scss';
 
 /**
@@ -11,6 +12,9 @@ const Content = (props) => {
         <Switch>
           <Route exact path="/">
             <Home user={props.user}/>
+          </Route>
+          <Route path="/teams/create">
+            <TeamForm user={props.user}/>
           </Route>
         </Switch>
       </main>

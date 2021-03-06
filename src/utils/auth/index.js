@@ -9,7 +9,7 @@ axios.interceptors.request.use(
     (config) => {
       const accessToken = localStorage.getItem(auth.ACCESS_TOKEN);
       if (accessToken) {
-        config.headers['x-auth-token'] = accessToken;
+        config.headers['Authorization'] = 'Bearer ' + accessToken;
       }
 
       return config;

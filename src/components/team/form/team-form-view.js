@@ -18,15 +18,19 @@ const TeamForm = (props) => {
             <div className="field">
               <label className="label">Name</label>
               <div className="control">
-                <input className="input" type="text" name="name" value={props.form.name}
-                       onChange={props.functions.handleChange} placeholder="My new team"/>
+                <input
+                    className="input"
+                    type="text"
+                    name="name"
+                    placeholder="My new team"
+                    {...props.name.bind} />
               </div>
             </div>
 
             <div className="field is-grouped">
               <div className="control">
                 <button className={'button is-link' + (props.isLoading ? ' is-loading' : '')}
-                        onClick={props.functions.submitForm}>
+                        onClick={props.submitForm}>
                   Create
                 </button>
               </div>

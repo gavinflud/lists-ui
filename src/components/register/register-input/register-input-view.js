@@ -5,9 +5,11 @@
  *  - name: the name given to the input
  *  - label: the label displayed above the input
  *  - type: text or password
- *  - functions: object with functions to get validation errors and handle input changes
+ *  - getValidationError: function that retrieves a particular validation error
  *  - placeholder: text that should be displayed as a placeholder for the input
  *  - icon: font-awesome icon identifier (if applicable)
+ *  - value: the value of the input
+ *  - onChange: the function to call when the value changes
  */
 const RegisterInput = (props) => {
 
@@ -22,7 +24,7 @@ const RegisterInput = (props) => {
    * @returns {String} the class value
    */
   const getErrorClass = (key, isInput) => {
-    const validationError = props.functions.getValidationError(key);
+    const validationError = props.getValidationError(key);
     if (isInput) {
       return validationError ? 'input is-danger' : 'input';
     } else {
@@ -35,9 +37,9 @@ const RegisterInput = (props) => {
         <label className="label">{props.label}</label>
         <div className={'control ' + (props.icon ? 'has-icons-left' : '')}>
           <input className={getErrorClass(props.name, true)} type={props.type} name={props.name}
-                 placeholder={props.placeholder} value={props.value} onChange={props.functions.handleChange}/>
+                 placeholder={props.placeholder} value={props.value} onChange={props.onChange}/>
           {props.icon ? <span className="icon is-small is-left"><i className={'fas ' + props.icon}/></span> : ''}
-          <p className={getErrorClass(props.name)}>{props.functions.getValidationError(props.name)}</p>
+          <p className={getErrorClass(props.name)}>{props.getValidationError(props.name)}</p>
         </div>
       </div>
   );

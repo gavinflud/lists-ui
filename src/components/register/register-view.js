@@ -21,22 +21,43 @@ const Register = (props) => {
             <section className="modal-card-body">
               <div className="columns">
                 <div className="column">
-                  <RegisterInput name="firstName" label="First Name" functions={props.functions} type="text"
-                                 value={props.form.firstName} placeholder="Joe"/>
+                  <RegisterInput name="firstName"
+                                 type="text"
+                                 placeholder="Joe"
+                                 label="First Name"
+                                 getValidationError={props.functions.getValidationError}
+                                 {...props.firstName.bind} />
                 </div>
                 <div className="column">
-                  <RegisterInput name="lastName" label="Last Name" functions={props.functions} type="text"
-                                 value={props.form.lastName} placeholder="Bloggs"/>
+                  <RegisterInput name="lastName"
+                                 type="text"
+                                 placeholder="Bloggs"
+                                 label="Last Name"
+                                 getValidationError={props.functions.getValidationError}
+                                 {...props.lastName.bind} />
                 </div>
               </div>
-              <RegisterInput name="username" label="Email" functions={props.functions} type="text"
-                             value={props.form.username} placeholder="jbloggs@test.com" icon="fa-envelope"/>
+              <RegisterInput name="username"
+                             type="text"
+                             placeholder="jbloggs@test.com"
+                             label="Email"
+                             icon="fa-envelope"
+                             getValidationError={props.functions.getValidationError}
+                             {...props.username.bind} />
 
-              <RegisterInput name="password" label="Password" functions={props.functions} type="password"
-                             value={props.form.password} icon="fa-lock"/>
+              <RegisterInput name="password"
+                             type="password"
+                             label="Password"
+                             icon="fa-lock"
+                             getValidationError={props.functions.getValidationError}
+                             {...props.password.bind} />
 
-              <RegisterInput name="retypedPassword" label="Repeat Password" functions={props.functions} type="password"
-                             value={props.form.retypedPassword} icon="fa-lock"/>
+              <RegisterInput name="retypedPassword"
+                             type="password"
+                             label="Repeat Password"
+                             icon="fa-lock"
+                             getValidationError={props.functions.getValidationError}
+                             {...props.retypedPassword.bind} />
             </section>
 
             <footer className="modal-card-foot">

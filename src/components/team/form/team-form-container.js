@@ -1,76 +1,41 @@
-import React from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 import TeamForm from './team-form-view';
 import {RequestType, sendRequest} from '../../../utils/http';
+import {useInput} from '../../../utils/hooks/input-hook';
 
 /**
  * Team form component. This form allows for teams to be created or updated.
  */
-class TeamFormContainer extends React.Component {
+const TeamFormContainer = (props) => {
 
-  state = {
-    form: {
-      name: '',
-    },
-    isLoading: false,
-  };
-
-  /**
-   * Toggle the loading status, which can be indicated with a loading icon in the UI.
-   *
-   * @param args passed from one call in the promise chain to the next one
-   * @returns {Promise} resolves with the args passed in
-   */
-  toggleLoading = (args) => {
-    return new Promise((resolve) => {
-      this.setState({
-        isLoading: !this.state.isLoading,
-      }, () => resolve(args));
-    });
-  };
-
-  /**
-   * Handle an input change and update the state accordingly.
-   *
-   * @param event the change event that took place
-   */
-  handleChange = (event) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      form: {
-        ...this.state.form,
-        [name]: value,
-      },
-    });
-  };
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const previousIsFormSubmittingRef = useRef(isFormSubmitting);
+  const name = useInput('');
 
   /**
    * Try to create/update the team.
+   */
+  const submitForm = () => {
+    setIsFormSubmitting(true);
+  };
+
+  /**
+   * When the form is submitted, send a create/update request.
    *
    * TODO: Handle error in creating team
    * TODO: Handle updating and creating
    */
-  submitForm = () => {
-    this.toggleLoading()
-        .then(() => sendRequest(RequestType.POST, '/teams', null, this.state.form, true))
-        .then(this.toggleLoading)
-        .then(() => this.props.history.push('/'));
-  };
+  useEffect(() => {
+    if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting) {
+      sendRequest(RequestType.POST, '/teams', null, {name: name.value}, true)
+          .then(() => props.history.push('/'));
+    }
+  }, [isFormSubmitting, name.value, props.history]);
 
-  /**
-   * Functions to be provided to child components.
-   */
-  functions = {
-    handleChange: this.handleChange,
-    submitForm: this.submitForm,
-  };
-
-  render() {
-    return <TeamForm form={this.state.form} functions={this.functions} isLoading={this.state.isLoading}/>;
-  }
-}
+  return <TeamForm name={name}
+                   submitForm={submitForm}
+                   isLoading={isFormSubmitting}/>;
+};
 
 export default withRouter(TeamFormContainer);

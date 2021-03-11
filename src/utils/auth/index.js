@@ -48,6 +48,9 @@ axios.interceptors.response.use(
     },
 );
 
+/**
+ * Authentication utility for handling JWT authentication and refreshing.
+ */
 const auth = {
 
   ACCESS_TOKEN: 'accessToken',

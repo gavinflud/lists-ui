@@ -11,10 +11,10 @@ const Content = (props) => {
       <main className="gf-main">
         <Switch>
           <Route exact path="/">
-            <Home user={props.user}/>
+            <Home/>
           </Route>
           <Route path="/teams/create">
-            <TeamForm user={props.user}/>
+            <TeamForm/>
           </Route>
         </Switch>
       </main>

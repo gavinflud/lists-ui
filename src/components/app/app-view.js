@@ -11,8 +11,8 @@ const App = (props) => {
   return (
       <div className="gf-app">
         <BrowserRouter>
-          <Header user={props.user} functions={props.functions}/>
-          <Content user={props.user}/>
+          <Header/>
+          <Content/>
           <Footer/>
         </BrowserRouter>
       </div>

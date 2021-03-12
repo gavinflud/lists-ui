@@ -40,7 +40,7 @@ const Header = (props) => {
               }
               {props.user ?
                   <div className="navbar-item has-dropdown is-hoverable">
-                    <a className="navbar-link">Gavin Flood</a>
+                    <a className="navbar-link">{props.user.firstName} {props.user.lastName}</a>
                     <div className="navbar-dropdown is-right">
                       <a className="navbar-item">Profile</a>
                       <a className="navbar-item">Preferences</a>
@@ -48,8 +48,8 @@ const Header = (props) => {
                   </div> :
                   <div className="navbar-item">
                     <div className="buttons">
-                      <Register functions={props.functions}/>
-                      <Login functions={props.functions}/>
+                      <Register/>
+                      <Login/>
                     </div>
                   </div>
               }

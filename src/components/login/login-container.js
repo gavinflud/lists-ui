@@ -1,7 +1,8 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import Login from './login-view';
 import auth from '../../utils/auth';
 import {useInput} from '../../utils/hooks/input-hook';
+import {AppContext} from '../app/app-context';
 
 /**
  * Login form component. The login form is a modal that pops up over whatever the user is currently viewing.
@@ -12,6 +13,7 @@ const LoginContainer = (props) => {
   const [isError, setIsError] = useState(false);
   const {value: username, bind: bindUsername} = useInput('');
   const {value: password, bind: bindPassword} = useInput('');
+  const {handleSuccessfulAuthentication} = useContext(AppContext);
 
   /**
    * If the modal is showing, hide it. If the modal is hidden, show it.
@@ -25,7 +27,7 @@ const LoginContainer = (props) => {
    */
   const submitForm = () => {
     auth.authenticate(username, password)
-        .then(props.functions.handleSuccessfulAuthentication)
+        .then(handleSuccessfulAuthentication)
         .catch(() => setIsError(true));
   };
 

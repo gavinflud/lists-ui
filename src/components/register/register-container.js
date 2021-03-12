@@ -1,9 +1,10 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import Register from './register-view';
 import {RequestType, sendRequest} from '../../utils/http';
 import auth from '../../utils/auth';
 import {useInput} from '../../utils/hooks/input-hook';
 import emailValidator from 'email-validator';
+import {AppContext} from '../app/app-context';
 
 /**
  * Register form component. The registration form is a modal that pops up over whatever the user is currently viewing.
@@ -19,6 +20,7 @@ const RegisterContainer = (props) => {
   const username = useInput('');
   const password = useInput('');
   const retypedPassword = useInput('');
+  const {handleSuccessfulAuthentication} = useContext(AppContext);
 
   /**
    * If the modal is showing, hide it. If the modal is hidden, show it.
@@ -100,7 +102,7 @@ const RegisterContainer = (props) => {
         },
       }, false)
           .then(() => auth.authenticate(username.value, password.value))
-          .then(props.functions.handleSuccessfulAuthentication);
+          .then(handleSuccessfulAuthentication);
     }
   }, [
     isFormSubmitting,
@@ -109,7 +111,7 @@ const RegisterContainer = (props) => {
     lastName.value,
     username.value,
     password.value,
-    props.functions.handleSuccessfulAuthentication,
+    handleSuccessfulAuthentication,
   ]);
 
   /**

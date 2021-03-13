@@ -36,6 +36,7 @@ export const AppProvider = ({children}) => {
             setUser({
               firstName: decoded.firstName,
               lastName: decoded.lastName,
+              id: decoded.id,
             });
             setHasRefreshedToken(false);
           } else if (!hasRefreshedToken) {

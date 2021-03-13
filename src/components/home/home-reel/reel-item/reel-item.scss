@@ -1,0 +1,24 @@
+@import "../../../../index.scss";
+
+.gf-boards-overview-item-container {
+  margin: 0.75em;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $grey;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+.gf-boards-overview-item-container:hover {
+  background: $link;
+}
+
+.gf-reel-item-title {
+  font-size: 3rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+

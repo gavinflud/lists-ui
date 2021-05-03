@@ -44,6 +44,7 @@ const Header = (props) => {
                     <div className="navbar-dropdown is-right">
                       <a className="navbar-item">Profile</a>
                       <a className="navbar-item">Preferences</a>
+                      <a className="navbar-item" onClick={props.logout}>Logout</a>
                     </div>
                   </div> :
                   <div className="navbar-item">

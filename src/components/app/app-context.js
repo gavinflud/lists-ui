@@ -56,7 +56,16 @@ export const AppProvider = ({children}) => {
         });
   };
 
-  const value = {user, setUser, hasRefreshedToken, setHasRefreshedToken, handleSuccessfulAuthentication};
+  /**
+   * Delete access/refresh tokens and reset the user state.
+   */
+  const handleLogout = () => {
+    localStorage.removeItem(auth.ACCESS_TOKEN);
+    localStorage.removeItem(auth.REFRESH_TOKEN);
+    setUser(null);
+  };
+
+  const value = {user, setUser, hasRefreshedToken, setHasRefreshedToken, handleSuccessfulAuthentication, handleLogout};
 
   return (
       <AppContext.Provider value={value}>

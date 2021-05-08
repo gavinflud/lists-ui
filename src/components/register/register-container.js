@@ -94,8 +94,10 @@ const RegisterContainer = (props) => {
 
     if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting && isValid) {
       sendRequest(RequestType.POST, '/users', null, {
-        firstName: firstName.value,
-        lastName: lastName.value,
+        user: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+        },
         credential: {
           emailAddress: username.value,
           password: password.value,

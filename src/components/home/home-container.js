@@ -24,7 +24,7 @@ const HomeContainer = (props) => {
       getTeams();
       getBoards();
     }
-  });
+  }, [user]);
 
   /**
    * Fetch the teams for the current user.

@@ -1,0 +1,25 @@
+@import "../../index.scss";
+
+.gf-sidebar-column-layout {
+  width: 100%;
+  display: flex;
+}
+
+.gf-sidebar-column-layout .gf-main-column {
+  flex: 3;
+  padding: 2rem 1.5rem;
+}
+
+.gf-main-column h1 {
+  margin-bottom: 1rem;
+}
+
+.gf-sidebar-column-layout .gf-secondary-column {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  border-left: 1px solid $light-grey;
+}
+
+.gf-secondary-column h2 {
+  margin-bottom: 1rem;
+}

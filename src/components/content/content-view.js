@@ -1,6 +1,8 @@
 import {Route, Switch} from 'react-router-dom';
 import Home from '../home';
 import TeamForm from '../team/form';
+import Team from '../team/';
+import TeamList from '../team/list/';
 import './content.scss';
 
 /**
@@ -13,8 +15,14 @@ const Content = (props) => {
           <Route exact path="/">
             <Home/>
           </Route>
+          <Route exact path="/teams">
+            <TeamList/>
+          </Route>
           <Route path="/teams/create">
             <TeamForm/>
+          </Route>
+          <Route path="/teams/:id">
+            <Team/>
           </Route>
         </Switch>
       </main>

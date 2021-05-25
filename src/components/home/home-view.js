@@ -1,4 +1,5 @@
-import HomeReel from './home-reel/home-reel-view';
+import HomeReel from './home-reel/';
+import TeamForm from '../team/form/';
 import './home.scss';
 
 /**
@@ -14,7 +15,8 @@ const Home = (props) => {
 
         <HomeReel title="Teams"
                   titleIcon="fa-users"
-                  createLink="/teams/create"
+                  createForm={TeamForm}
+                  onCreateSuccess={props.refresh}
                   items={props.teams}/>
 
         <HomeReel title="Boards"

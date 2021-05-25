@@ -1,43 +1,39 @@
-import {Link} from 'react-router-dom';
-
 /**
  * The form view for creating and editing teams.
  */
 const TeamForm = (props) => {
+
+  const modalClass = props.isModalActive ? 'modal is-active' : 'modal';
+
   return (
       <div>
-        <section className="section">
-          <span className="icon-text">
-            <span className="icon is-medium">
-              <i className="fa fa-users fa-lg"/>
-            </span>
-            <span className="title is-4 gf-title-with-icon">Create Team</span>
-          </span>
+        <section className={modalClass}>
+          <div className="modal-background"/>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">Create Team</p>
+            </header>
 
-          <div className="gf-below-section-title">
-            <div className="field">
-              <label className="label">Name</label>
-              <div className="control">
-                <input
-                    className="input"
-                    type="text"
-                    name="name"
-                    placeholder="My new team"
-                    {...props.name.bind} />
+            <section className="modal-card-body">
+              <div className="field">
+                <label className="label">Name</label>
+                <div className="control">
+                  <input
+                      className="input"
+                      type="text"
+                      name="name"
+                      placeholder="My new team"
+                      {...props.name.bind} />
+                </div>
               </div>
-            </div>
+            </section>
 
-            <div className="field is-grouped">
-              <div className="control">
-                <button className={'button is-link' + (props.isLoading ? ' is-loading' : '')}
-                        onClick={props.submitForm}>
-                  Create
-                </button>
-              </div>
-              <div className="control">
-                <Link to="/" className="button is-link is-light">Cancel</Link>
-              </div>
-            </div>
+            <footer className="modal-card-foot">
+              <button className={'button is-success' + (props.isLoading ? ' is-loading' : '')}
+                      onClick={props.functions.submitForm}>Create
+              </button>
+              <button className="button" onClick={props.functions.onClose}>Cancel</button>
+            </footer>
           </div>
         </section>
       </div>

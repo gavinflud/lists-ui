@@ -12,6 +12,7 @@ const HomeContainer = (props) => {
 
   const {user} = useContext(AppContext);
 
+  const [shouldRefresh, setShouldRefresh] = useState(false);
   const [teams, setTeams] = useState([]);
   const [boards, setBoards] = useState([]);
   const [recentBoards, setRecentBoards] = useState([]);
@@ -20,41 +21,48 @@ const HomeContainer = (props) => {
    * Fetch all necessary data once the component mounts.
    */
   useEffect(() => {
-    if (user) {
+
+    /**
+     * Fetch the teams for the current user.
+     *
+     * TODO: Handle an error response
+     */
+    const getTeams = () => {
+      sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
+          .then((response) => {
+            setTeams(response.data.body.content.map((item) => {
+              return {
+                title: item.name,
+                link: '/teams/' + item.id,
+              };
+            }));
+          });
+    };
+
+    /**
+     * Fetch the boards for the current user and populate both the "boards" and "recentBoards" arrays.
+     *
+     * TODO: Handle an error response
+     */
+    const getBoards = () => {};
+
+    if (user || shouldRefresh) {
       getTeams();
       getBoards();
+      setShouldRefresh(false);
     }
-  }, [user]);
+  }, [user, shouldRefresh]);
 
-  /**
-   * Fetch the teams for the current user.
-   *
-   * TODO: Handle an error response
-   */
-  const getTeams = () => {
-    sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
-        .then((response) => {
-          setTeams(response.data.body.content.map((item) => {
-            return {
-              title: item.name,
-              link: '/teams/' + item.id,
-            };
-          }));
-        });
+  const refresh = () => {
+    setShouldRefresh(true);
   };
-
-  /**
-   * Fetch the boards for the current user and populate both the "boards" and "recentBoards" arrays.
-   *
-   * TODO: Handle an error response
-   */
-  const getBoards = () => {};
 
   // Show a different view depending on if the user is logged in or not
   if (user) {
     return <Home recentBoards={recentBoards}
                  teams={teams}
-                 boards={boards}/>;
+                 boards={boards}
+                 refresh={refresh}/>;
   }
 
   return <HomeUnauthenticated/>;

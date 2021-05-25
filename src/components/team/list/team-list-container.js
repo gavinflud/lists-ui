@@ -9,28 +9,45 @@ import {RequestType, sendRequest} from '../../../utils/http';
 const TeamListContainer = () => {
 
   const {user} = useContext(AppContext);
+  const [shouldRefresh, setShouldRefresh] = useState(false);
   const [teams, setTeams] = useState([]);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   /**
    * Load the teams on first render.
    */
   useEffect(() => {
-    if (user) {
+
+    /**
+     * Get the teams.
+     */
+    const getTeams = () => {
+      sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
+          .then((response) => {
+            setTeams(response.data.body.content);
+          });
+    };
+
+    if (user || shouldRefresh) {
       getTeams();
     }
-  }, [user]);
+  }, [user, shouldRefresh]);
 
   /**
-   * Get the teams.
+   * Toggle the isFormVisible flag value.
    */
-  const getTeams = () => {
-    sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
-        .then((response) => {
-          setTeams(response.data.body.content);
-        });
+  const toggleIsFormVisible = () => {
+    setIsFormVisible(!isFormVisible);
   };
 
-  return <TeamList teams={teams}/>;
+  const refresh = () => {
+    setShouldRefresh(true);
+  };
+
+  return <TeamList teams={teams}
+                   isFormVisible={isFormVisible}
+                   toggleIsFormVisible={toggleIsFormVisible}
+                   refresh={refresh}/>;
 
 };
 

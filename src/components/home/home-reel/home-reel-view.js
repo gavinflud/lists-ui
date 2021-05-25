@@ -1,4 +1,3 @@
-import {Link} from 'react-router-dom';
 import ReelItem from './reel-item';
 import './home-reel.scss';
 
@@ -11,7 +10,8 @@ import './home-reel.scss';
  */
 const HomeReel = (props) => {
 
-  const reelItems = props.items.map((item) => <ReelItem title={item.title} link={item.link}/>);
+  const CreateForm = props.createForm;
+  const reelItems = props.items.map((item) => <ReelItem key={item.link} title={item.title} link={item.link}/>);
 
   return (
       <section className="section gf-home-reel">
@@ -25,16 +25,19 @@ const HomeReel = (props) => {
               </span>
           </div>
           {
-            props.createLink ?
+            props.createForm ?
                 <div className="level-right">
                   <div className="level-item">
-                    <Link to={props.createLink} className="button is-success">
+                    <button onClick={props.toggleIsFormVisible} className="button is-success">
                   <span className="icon">
                     <i className="fas fa-plus-square"/>
                   </span>
                       <span>New</span>
-                    </Link>
+                    </button>
                   </div>
+                  <CreateForm isActive={props.isFormVisible}
+                              onClose={props.toggleIsFormVisible}
+                              onSuccess={props.onCreateSuccess}/>
                 </div> :
                 ''
           }

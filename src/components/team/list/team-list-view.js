@@ -1,4 +1,5 @@
 import {Link} from 'react-router-dom';
+import TeamForm from '../form/';
 
 /**
  * Shows a list of teams.
@@ -10,7 +11,7 @@ const TeamList = (props) => {
         <div className="gf-main-column">
           <h1>Teams</h1>
 
-          <Link to="/teams/create" className="button is-success">New Team</Link>
+          <button className="button is-success" onClick={props.toggleIsFormVisible}>New Team</button>
 
           <div className="menu">
             <ul className="menu-list">
@@ -31,6 +32,10 @@ const TeamList = (props) => {
             </ul>
           </aside>
         </div>
+
+        <TeamForm isActive={props.isFormVisible}
+                  onClose={props.toggleIsFormVisible}
+                  onSuccess={props.refresh}/>
       </div>
   );
 

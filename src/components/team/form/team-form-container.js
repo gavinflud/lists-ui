@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from 'react';
-import {withRouter} from 'react-router-dom';
 import TeamForm from './team-form-view';
 import {RequestType, sendRequest} from '../../../utils/http';
 import {useInput} from '../../../utils/hooks/input-hook';
@@ -9,6 +8,7 @@ import {useInput} from '../../../utils/hooks/input-hook';
  */
 const TeamFormContainer = (props) => {
 
+  const isModalActive = props.isActive ? true : false;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
   const name = useInput('');
@@ -29,13 +29,24 @@ const TeamFormContainer = (props) => {
   useEffect(() => {
     if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting) {
       sendRequest(RequestType.POST, '/teams', null, {name: name.value}, true)
-          .then(() => props.history.push('/'));
+          .then(() => {
+            setIsFormSubmitting(false);
+            props.onClose();
+            props.onSuccess();
+          });
     }
   }, [isFormSubmitting, name.value, props.history]);
 
+  const functions = {
+    submitForm: submitForm,
+    onClose: props.onClose,
+    onSuccess: props.onSuccess,
+  };
+
   return <TeamForm name={name}
-                   submitForm={submitForm}
-                   isLoading={isFormSubmitting}/>;
+                   isModalActive={isModalActive}
+                   isLoading={isFormSubmitting}
+                   functions={functions}/>;
 };
 
-export default withRouter(TeamFormContainer);
+export default TeamFormContainer;

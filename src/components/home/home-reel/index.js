@@ -1,1 +1,1 @@
-export {default} from './home-reel-view';
+export {default} from './home-reel-container';

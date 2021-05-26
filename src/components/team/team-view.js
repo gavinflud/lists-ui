@@ -18,9 +18,7 @@ const Team = (props) => {
 
           <aside className="menu">
             <ul className="menu-list">
-              <li><a>Gavin Flood</a></li>
-              <li><a>James Kavanagh</a></li>
-              <li><a>Patrick Bamford</a></li>
+              {props.members.map(member => <li key={member.id}><a>{member.firstName} {member.lastName}</a></li>)}
             </ul>
           </aside>
         </div>

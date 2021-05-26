@@ -44,7 +44,17 @@ const HomeContainer = (props) => {
      *
      * TODO: Handle an error response
      */
-    const getBoards = () => {};
+    const getBoards = () => {
+      sendRequest(RequestType.GET, '/boards', {userId: user.id}, null, true)
+          .then((response) => {
+            setBoards(response.data.body.content.map((item) => {
+              return {
+                title: item.name,
+                link: '/boards/' + item.id,
+              };
+            }));
+          });
+    };
 
     if (user || shouldRefresh) {
       getTeams();

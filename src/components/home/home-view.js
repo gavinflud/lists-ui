@@ -1,5 +1,6 @@
 import HomeReel from './home-reel/';
 import TeamForm from '../team/form/';
+import BoardForm from '../board/form/';
 import './home.scss';
 
 /**
@@ -21,7 +22,8 @@ const Home = (props) => {
 
         <HomeReel title="Boards"
                   titleIcon="fa-th-list"
-                  createLink="/boards/create"
+                  createForm={BoardForm}
+                  onCreateSuccess={props.refresh}
                   items={props.boards}/>
       </div>
   );

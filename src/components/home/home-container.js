@@ -49,6 +49,11 @@ const HomeContainer = (props) => {
     }
   }, [user, shouldRefresh]);
 
+  // TODO: This is only temporary until we track board views
+  useEffect(() => {
+    setRecentBoards(boards);
+  }, [boards]);
+
   const refresh = () => {
     setShouldRefresh(true);
   };

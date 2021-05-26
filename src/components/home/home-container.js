@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 import {AppContext} from '../app/app-context';
-import {RequestType, sendRequest} from '../../utils/http';
+import Api from '../../utils/api';
 import Home from './home-view';
 import HomeUnauthenticated from './home-unauthenticated-view';
 
@@ -22,38 +22,24 @@ const HomeContainer = (props) => {
    */
   useEffect(() => {
 
-    /**
-     * Fetch the teams for the current user.
-     *
-     * TODO: Handle an error response
-     */
     const getTeams = () => {
-      sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
-          .then((response) => {
-            setTeams(response.data.body.content.map((item) => {
-              return {
-                title: item.name,
-                link: '/teams/' + item.id,
-              };
-            }));
-          });
+      Api.getTeamsForCurrentUser(user)
+          .then(teams => setTeams(teams.map(team => {
+            return {
+              title: team.name,
+              link: '/teams/' + team.id,
+            };
+          })));
     };
 
-    /**
-     * Fetch the boards for the current user and populate both the "boards" and "recentBoards" arrays.
-     *
-     * TODO: Handle an error response
-     */
     const getBoards = () => {
-      sendRequest(RequestType.GET, '/boards', {userId: user.id}, null, true)
-          .then((response) => {
-            setBoards(response.data.body.content.map((item) => {
-              return {
-                title: item.name,
-                link: '/boards/' + item.id,
-              };
-            }));
-          });
+      Api.getBoardsForCurrentUser(user)
+          .then(boards => setBoards(boards.map(board => {
+            return {
+              title: board.name,
+              link: '/boards/' + board.id,
+            };
+          })));
     };
 
     if (user || shouldRefresh) {

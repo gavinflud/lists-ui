@@ -1,7 +1,7 @@
 import TeamList from './team-list-view';
 import {useContext, useEffect, useState} from 'react';
 import {AppContext} from '../../app/app-context';
-import {RequestType, sendRequest} from '../../../utils/http';
+import Api from '../../../utils/api';
 
 /**
  * Container for the team list screen.
@@ -17,19 +17,9 @@ const TeamListContainer = () => {
    * Load the teams on first render.
    */
   useEffect(() => {
-
-    /**
-     * Get the teams.
-     */
-    const getTeams = () => {
-      sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
-          .then((response) => {
-            setTeams(response.data.body.content);
-          });
-    };
-
     if (user || shouldRefresh) {
-      getTeams();
+      Api.getTeamsForCurrentUser(user)
+          .then(setTeams);
     }
   }, [user, shouldRefresh]);
 

@@ -3,6 +3,7 @@ import {useInput} from '../../../utils/hooks/input-hook';
 import {useContext, useEffect, useRef, useState} from 'react';
 import {RequestType, sendRequest} from '../../../utils/http';
 import {AppContext} from '../../app/app-context';
+import Api from '../../../utils/api';
 
 /**
  * Board form component. This form allows for boards to be created or updated.
@@ -29,20 +30,9 @@ const BoardFormContainer = (props) => {
    * Fetch all necessary data when the component mounts.
    */
   useEffect(() => {
-
-    /**
-     * Fetch the teams for the current user.
-     *
-     * TODO: Handle an error response
-     * TODO: Move to a service to avoid duplicate calls
-     */
-    const getTeams = () => {
-      sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
-          .then((response) => setTeams(response.data.body.content));
-    };
-
     if (user) {
-      getTeams();
+      Api.getTeamsForCurrentUser(user)
+          .then(setTeams);
     }
   }, [user]);
 

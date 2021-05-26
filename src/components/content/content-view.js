@@ -2,6 +2,8 @@ import {Route, Switch} from 'react-router-dom';
 import Home from '../home';
 import Team from '../team/';
 import TeamList from '../team/list/';
+import BoardList from '../board/list/';
+import Board from '../board/';
 import './content.scss';
 
 /**
@@ -19,6 +21,12 @@ const Content = (props) => {
           </Route>
           <Route path="/teams/:id">
             <Team/>
+          </Route>
+          <Route exact path="/boards">
+            <BoardList/>
+          </Route>
+          <Route path="/boards/:id">
+            <Board/>
           </Route>
         </Switch>
       </main>

@@ -17,20 +17,18 @@ const TeamContainer = (props) => {
    * Load the team on first render.
    */
   useEffect(() => {
+
+    const getTeam = () => {
+      sendRequest(RequestType.GET, '/teams/' + id, null, null, true)
+          .then((response) => {
+            setTeam(response.data.body);
+          });
+    };
+
     if (user && id) {
       getTeam();
     }
   }, [user]);
-
-  /**
-   * Get the team.
-   */
-  const getTeam = () => {
-    sendRequest(RequestType.GET, '/teams/' + id, null, null, true)
-        .then((response) => {
-          setTeam(response.data.body);
-        });
-  };
 
   return <Team team={team}/>;
 

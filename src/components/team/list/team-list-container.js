@@ -20,6 +20,7 @@ const TeamListContainer = () => {
     if (user || shouldRefresh) {
       Api.getTeamsForCurrentUser(user)
           .then(setTeams);
+      setShouldRefresh(false);
     }
   }, [user, shouldRefresh]);
 

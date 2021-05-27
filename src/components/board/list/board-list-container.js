@@ -20,6 +20,7 @@ const BoardListContainer = () => {
     if (user || shouldRefresh) {
       Api.getBoardsForCurrentUser(user)
           .then(setBoards);
+      setShouldRefresh(false);
     }
   }, [user, shouldRefresh]);
 

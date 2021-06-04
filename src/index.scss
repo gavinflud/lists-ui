@@ -8,6 +8,7 @@ $color-3: #072E18;
 $color-4: #e8db1eff;
 $color-5: #1e9451ff;
 $color-6: #7D1A52;
+$color-7: #4a4a4a;
 
 $light-grey: #eaeaef;
 
@@ -17,6 +18,7 @@ $success: $color-5;
 $info: $color-3;
 $warning: $color-4;
 $danger: $color-6;
+$text: $color-7;
 
 $footer-background-color: none;
 $footer-padding: 2rem;
@@ -28,6 +30,10 @@ $section-padding: 2rem 1.5rem;
 html, body, #root {
   height: 100%;
   overflow: hidden;
+}
+
+body {
+  color: $text;
 }
 
 body, button, input, optgroup, select, textarea {

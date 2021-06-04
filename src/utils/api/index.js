@@ -10,6 +10,8 @@ const Api = {
   /**
    * Get the teams the current user is a member of.
    *
+   * TODO: Doesn't handle paging
+   *
    * @param user the current user
    * @returns {Promise<Array>} an array of teams
    */
@@ -23,6 +25,8 @@ const Api = {
   /**
    * Get the boards the current user has access to.
    *
+   * TODO: Doesn't handle paging
+   *
    * @param user the current user
    * @returns {Promise<Array>} an array of boards
    */
@@ -30,6 +34,19 @@ const Api = {
     return new Promise(resolve => {
       sendRequest(RequestType.GET, '/boards', {userId: user.id}, null, true)
           .then((response) => resolve(response.data.body.content));
+    });
+  },
+
+  /**
+   * Get the lists for a specific board.
+   *
+   * @param boardId identifies the board
+   * @returns {Promise<Array>} an array of lists
+   */
+  getListsForBoard: (boardId) => {
+    return new Promise(resolve => {
+      sendRequest(RequestType.GET, '/lists', {boardId: boardId}, null, true)
+          .then(response => resolve(response.data.body));
     });
   },
 

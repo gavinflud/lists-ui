@@ -11,7 +11,7 @@ import Api from '../../../utils/api';
 const BoardFormContainer = (props) => {
 
   const {user} = useContext(AppContext);
-  const isModalActive = props.isActive ? true : false;
+  const isModalActive = !!props.isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
@@ -69,7 +69,6 @@ const BoardFormContainer = (props) => {
   const functions = {
     submitForm: submitForm,
     onClose: props.onClose,
-    onSuccess: props.onSuccess,
   };
 
   return <BoardForm name={name}

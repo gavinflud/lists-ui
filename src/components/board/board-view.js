@@ -1,5 +1,6 @@
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import List from '../list/';
+import ListForm from '../list/form/';
 import './board-view.scss';
 
 /**
@@ -57,12 +58,18 @@ const Board = (props) => {
                   {provided.placeholder}
 
                   <div className="gf-list-draggable gf-list-container-button">
-                    <button>New List</button>
+                    <button onClick={props.toggleIsListFormVisible}>New List</button>
                   </div>
                 </div>
             )}
           </Droppable>
         </DragDropContext>
+
+        <ListForm isActive={props.isListFormVisible}
+                  onClose={props.toggleIsListFormVisible}
+                  onSuccess={props.refresh}
+                  board={props.board}
+                  nextPriority={props.lists.length}/>
       </section>
   );
 

@@ -14,6 +14,9 @@ const BoardContainer = () => {
   const {user} = useContext(AppContext);
   const [board, setBoard] = useState({name: '', description: ''});
   const [lists, setLists] = useState([]);
+  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [shouldUpdateLists, setShouldUpdateLists] = useState(false);
+  const [isListFormVisible, setIsListFormVisible] = useState(false);
 
   /**
    * Load the board on first render.
@@ -29,18 +32,23 @@ const BoardContainer = () => {
 
     const getLists = () => {
       Api.getListsForBoard(parseInt(id))
-          .then(lists => setLists(lists));
+          .then(lists => setLists(lists.sort((a, b) => a.priority - b.priority)));
     };
 
-    if (user && id) {
+    if ((user && id) || shouldRefresh) {
       getBoard();
       getLists();
+      setShouldRefresh(false);
     }
-  }, [user, id]);
+  }, [user, id, shouldRefresh]);
 
+  // Updates lists on server side if they have been modified on client side
   useEffect(() => {
-    // TODO: Update lists on server side when they change on client side
-  }, [lists]);
+    if (shouldUpdateLists) {
+      sendRequest(RequestType.PUT, '/lists', {boardId: board.id}, {lists: lists}, true)
+          .then(() => setShouldUpdateLists(false));
+    }
+  }, [shouldUpdateLists, lists, board.id]);
 
   /**
    * Reorder the items in a list after an item has moved.
@@ -78,12 +86,27 @@ const BoardContainer = () => {
       const reorderedLists = reorder(lists, source.index, destination.index);
       reorderedLists.forEach((list, i) => list.priority = i);
       setLists(reorderedLists);
+      setShouldUpdateLists(true);
     }
+  };
+
+  /**
+   * Toggle the isFormVisible flag value.
+   */
+  const toggleIsListFormVisible = () => {
+    setIsListFormVisible(!isListFormVisible);
+  };
+
+  const refresh = () => {
+    setShouldRefresh(true);
   };
 
   return <Board board={board}
                 lists={lists}
-                onDragEnd={onDragEnd}/>;
+                onDragEnd={onDragEnd}
+                isListFormVisible={isListFormVisible}
+                toggleIsListFormVisible={toggleIsListFormVisible}
+                refresh={refresh}/>;
 
 };
 

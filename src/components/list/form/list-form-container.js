@@ -1,13 +1,12 @@
+import ListForm from './list-form-view';
 import {useEffect, useRef, useState} from 'react';
-import TeamForm from './team-form-view';
-import {RequestType, sendRequest} from '../../../utils/http';
 import {useInput} from '../../../utils/hooks/input-hook';
+import {RequestType, sendRequest} from '../../../utils/http';
 
-/**
- * Team form component. This form allows for teams to be created or updated.
- */
-const TeamFormContainer = (props) => {
+const ListFormContainer = props => {
 
+  const {board} = props;
+  const {nextPriority} = props;
   const isModalActive = !!props.isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
@@ -21,6 +20,13 @@ const TeamFormContainer = (props) => {
   };
 
   /**
+   * Reset form data to base value.
+   */
+  const reset = () => {
+    name.setValue('');
+  };
+
+  /**
    * When the form is submitted, send a create/update request.
    *
    * TODO: Handle error in creating team
@@ -28,24 +34,30 @@ const TeamFormContainer = (props) => {
    */
   useEffect(() => {
     if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting) {
-      sendRequest(RequestType.POST, '/teams', null, {name: name.value}, true)
+      sendRequest(RequestType.POST, '/lists', null, {
+        name: name.value,
+        priority: nextPriority,
+        boardId: board.id,
+      }, true)
           .then(() => {
             setIsFormSubmitting(false);
             props.onClose();
             props.onSuccess();
+            reset();
           });
     }
-  }, [isFormSubmitting, name.value, props.history]);
+  }, [isFormSubmitting, name.value, board, props]);
 
   const functions = {
     submitForm: submitForm,
     onClose: props.onClose,
   };
 
-  return <TeamForm name={name}
+  return <ListForm name={name}
                    isModalActive={isModalActive}
                    isLoading={isFormSubmitting}
                    functions={functions}/>;
+
 };
 
-export default TeamFormContainer;
+export default ListFormContainer;

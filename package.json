@@ -20,7 +20,8 @@
     "moment": "^2.29.1",
     "jsonwebtoken": "^8.5.1",
     "cookie-parser": "^1.4.5",
-    "email-validator": "^2.0.4"
+    "email-validator": "^2.0.4",
+    "react-beautiful-dnd": "^13.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -8,13 +8,11 @@ import {RequestType, sendRequest} from '../../../utils/http';
  */
 const CardFormContainer = props => {
 
-  const {list} = props;
+  const {list, nextPriority} = props;
   const isModalActive = !!props.isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
   const title = useInput('');
-  const description = useInput('');
-  const dueDate = useInput(new Date().toISOString());
 
   /**
    * Try to create/update the card.
@@ -36,15 +34,12 @@ const CardFormContainer = props => {
      */
     const reset = () => {
       title.setValue('');
-      description.setValue('');
-      dueDate.setValue(new Date().toISOString());
     };
 
     if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting) {
       sendRequest(RequestType.POST, '/cards', null, {
         title: title.value,
-        description: description.value,
-        dueDate: dueDate.value,
+        priority: nextPriority,
         listId: list.id,
       }, true)
           .then(() => {
@@ -54,7 +49,7 @@ const CardFormContainer = props => {
             reset();
           });
     }
-  }, [isFormSubmitting, title.value, description.value, dueDate.value, list.id, props]);
+  }, [isFormSubmitting, title, list.id, nextPriority, props]);
 
   const functions = {
     submitForm: submitForm,
@@ -62,8 +57,6 @@ const CardFormContainer = props => {
   };
 
   return <CardForm title={title}
-                   description={description}
-                   dueDate={dueDate}
                    isModalActive={isModalActive}
                    isLoading={isFormSubmitting}
                    functions={functions}/>;

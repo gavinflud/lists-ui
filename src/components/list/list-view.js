@@ -22,13 +22,14 @@ const List = (props) => {
         </div>
 
         <div className="gf-list-cards">
-          {cards.map(card => <Card card={card}/>)}
+          {cards.map(card => <Card card={card} key={card.id}/>)}
         </div>
 
         <CardForm isActive={props.isCardFormVisible}
                   onClose={props.toggleIsCardFormVisible}
                   onSuccess={props.refresh}
-                  list={props.list}/>
+                  list={props.list}
+                  nextPriority={cards.length}/>
       </div>
   );
 

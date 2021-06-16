@@ -5,7 +5,7 @@ import Card from './card-view';
  */
 const CardContainer = ({card}) => {
 
-  return <Card card={card} key={card.id}/>;
+  return <Card card={card}/>;
 
 };
 

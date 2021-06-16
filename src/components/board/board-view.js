@@ -28,13 +28,15 @@ const Board = (props) => {
     return (
         <Draggable key={list.id}
                    draggableId={'list-' + list.id}
-                   index={list.priority}>
+                   index={list.priority}
+                   isDragDisabled={!list.isDraggable}>
           {(provided, snapshot) => (
               <div ref={provided.innerRef}
                    className={getListClassName(snapshot.isDragging)}
                    {...provided.draggableProps}
                    {...provided.dragHandleProps}>
-                <List list={list}/>
+                <List list={list}
+                      toggleIsListDraggable={props.toggleIsListDraggable}/>
               </div>
           )}
         </Draggable>

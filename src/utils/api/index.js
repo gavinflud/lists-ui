@@ -15,7 +15,7 @@ const Api = {
    * @param user the current user
    * @returns {Promise<Array>} an array of teams
    */
-  getTeamsForCurrentUser: (user) => {
+  getTeamsForCurrentUser: user => {
     return new Promise(resolve => {
       sendRequest(RequestType.GET, '/teams', {userId: user.id}, null, true)
           .then((response) => resolve(response.data.body.content));
@@ -30,7 +30,7 @@ const Api = {
    * @param user the current user
    * @returns {Promise<Array>} an array of boards
    */
-  getBoardsForCurrentUser: (user) => {
+  getBoardsForCurrentUser: user => {
     return new Promise(resolve => {
       sendRequest(RequestType.GET, '/boards', {userId: user.id}, null, true)
           .then((response) => resolve(response.data.body.content));
@@ -43,9 +43,22 @@ const Api = {
    * @param boardId identifies the board
    * @returns {Promise<Array>} an array of lists
    */
-  getListsForBoard: (boardId) => {
+  getListsForBoard: boardId => {
     return new Promise(resolve => {
       sendRequest(RequestType.GET, '/lists', {boardId: boardId}, null, true)
+          .then(response => resolve(response.data.body));
+    });
+  },
+
+  /**
+   * Get the cards for a specific list.
+   *
+   * @param listId identifies the list
+   * @returns {Promise<Array>} an array of cards
+   */
+  getCardsForList: listId => {
+    return new Promise(resolve => {
+      sendRequest(RequestType.GET, '/cards', {listId: listId}, null, true)
           .then(response => resolve(response.data.body));
     });
   },

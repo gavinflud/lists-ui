@@ -1,46 +1,51 @@
-import ListForm from './list-form-view';
+import CardForm from './card-form-view';
 import {useEffect, useRef, useState} from 'react';
 import {useInput} from '../../../utils/hooks/input-hook';
 import {RequestType, sendRequest} from '../../../utils/http';
 
 /**
- * List form component. This form allows for lists to be created or updated.
+ * Card form component. This form allows for cards to be created or updated.
  */
-const ListFormContainer = props => {
+const CardFormContainer = props => {
 
-  const {board} = props;
-  const {nextPriority} = props;
+  const {list} = props;
   const isModalActive = !!props.isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
-  const name = useInput('');
+  const title = useInput('');
+  const description = useInput('');
+  const dueDate = useInput(new Date().toISOString());
 
   /**
-   * Try to create/update the team.
+   * Try to create/update the card.
    */
   const submitForm = () => {
     setIsFormSubmitting(true);
   };
 
   /**
-   * Reset form data to base value.
-   */
-  const reset = () => {
-    name.setValue('');
-  };
-
-  /**
    * When the form is submitted, send a create/update request.
    *
-   * TODO: Handle error in creating team
+   * TODO: Handle error in creating card
    * TODO: Handle updating and creating
    */
   useEffect(() => {
+
+    /**
+     * Reset form data to base value.
+     */
+    const reset = () => {
+      title.setValue('');
+      description.setValue('');
+      dueDate.setValue(new Date().toISOString());
+    };
+
     if (previousIsFormSubmittingRef.current !== isFormSubmitting && isFormSubmitting) {
-      sendRequest(RequestType.POST, '/lists', null, {
-        name: name.value,
-        priority: nextPriority,
-        boardId: board.id,
+      sendRequest(RequestType.POST, '/cards', null, {
+        title: title.value,
+        description: description.value,
+        dueDate: dueDate.value,
+        listId: list.id,
       }, true)
           .then(() => {
             setIsFormSubmitting(false);
@@ -49,18 +54,20 @@ const ListFormContainer = props => {
             reset();
           });
     }
-  }, [isFormSubmitting, name.value, board, props]);
+  }, [isFormSubmitting, title.value, description.value, dueDate.value, list.id, props]);
 
   const functions = {
     submitForm: submitForm,
     onClose: props.onClose,
   };
 
-  return <ListForm name={name}
+  return <CardForm title={title}
+                   description={description}
+                   dueDate={dueDate}
                    isModalActive={isModalActive}
                    isLoading={isFormSubmitting}
                    functions={functions}/>;
 
 };
 
-export default ListFormContainer;
+export default CardFormContainer;

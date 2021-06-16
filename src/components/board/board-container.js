@@ -32,7 +32,11 @@ const BoardContainer = () => {
 
     const getLists = () => {
       Api.getListsForBoard(parseInt(id))
-          .then(lists => setLists(lists.sort((a, b) => a.priority - b.priority)));
+          .then(lists => {
+            // Adding this property allows us to later prevent dragging on certain interactions
+            lists.forEach(list => list.isDraggable = true);
+            setLists(lists.sort((a, b) => a.priority - b.priority));
+          });
     };
 
     if ((user && id) || shouldRefresh) {
@@ -101,12 +105,30 @@ const BoardContainer = () => {
     setShouldRefresh(true);
   };
 
+  /**
+   * Toggle if a list is draggable or not.
+   *
+   * @param list the list to toggle
+   */
+  const toggleIsListDraggable = list => {
+    let updatedLists = lists.map(l => {
+      if (l.id === list.id) {
+        l.isDraggable = !l.isDraggable;
+      }
+
+      return l;
+    });
+
+    setLists(updatedLists);
+  };
+
   return <Board board={board}
                 lists={lists}
                 onDragEnd={onDragEnd}
                 isListFormVisible={isListFormVisible}
                 toggleIsListFormVisible={toggleIsListFormVisible}
-                refresh={refresh}/>;
+                refresh={refresh}
+                toggleIsListDraggable={toggleIsListDraggable}/>;
 
 };
 

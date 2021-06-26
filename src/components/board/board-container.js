@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom';
 import {AppContext} from '../app/app-context';
-import {useContext, useEffect, useState} from 'react';
+import {useCallback, useContext, useEffect, useState} from 'react';
 import {RequestType, sendRequest} from '../../utils/http';
 import Api from '../../utils/api';
 import Board from './board-view';
@@ -13,46 +13,177 @@ const BoardContainer = () => {
   const {id} = useParams();
   const {user} = useContext(AppContext);
   const [board, setBoard] = useState({name: '', description: ''});
-  const [lists, setLists] = useState([]);
+
+  /*
+   * orderedLists is the source of truth for the order of the lists client-side. listMap is a map where the key is
+   * the list ID and the value is the list object.
+   */
+  const [listMap, setListMap] = useState({});
+  const [orderedLists, setOrderedLists] = useState([]);
+  const [cardMap, setCardMap] = useState({});
+  const [orderedCards, setOrderedCards] = useState({});
+
   const [shouldRefresh, setShouldRefresh] = useState(false);
-  const [shouldUpdateLists, setShouldUpdateLists] = useState(false);
   const [isListFormVisible, setIsListFormVisible] = useState(false);
+
+  /**
+   * Fetch the board data.
+   */
+  const getBoard = useCallback(() => {
+    sendRequest(RequestType.GET, '/boards/' + id, null, null, true)
+        .then((response) => {
+          setBoard(response.data.body);
+        });
+  }, [id]);
+
+  /**
+   * Fetch the lists data.
+   */
+  const getLists = useCallback(() => {
+    Api.getListsForBoard(parseInt(id))
+        .then(lists => {
+          // Adding this property allows us to later prevent dragging on certain interactions
+          lists.forEach(list => list.isDraggable = true);
+          const updatedListMap = lists.reduce((listMap, list) => ({
+            ...listMap,
+            [list.id]: list,
+          }), {});
+
+          setOrderedLists(lists.sort((a, b) => a.priority - b.priority)
+              .map(list => list.id));
+          setListMap(updatedListMap);
+        });
+  }, [id]);
+
+  /**
+   * Fetch the cards data.
+   */
+  const getCards = useCallback(() => {
+    const callsToCardsAPI = orderedLists.map(listId => {
+      return Api.getCardsForList(listId)
+          .then(cards => {
+            // Adding this property allows us to later prevent dragging on certain interactions
+            cards.forEach(card => card.isDraggable = true);
+            return cards;
+          });
+    });
+
+    // Separate call to the API for each list, then flatten the card array results from each and setup the map
+    Promise.all(callsToCardsAPI)
+        .then(cards => {
+          const flattenedCards = cards.flat();
+          const updatedCardMap = flattenedCards.reduce((map, card) => ({
+            ...map,
+            [card.id]: card,
+          }), {});
+          setCardMap(updatedCardMap);
+          //cardMapRef.current = updatedCardMap;
+
+          setOrderedCards(flattenedCards
+              .sort((a, b) => a.priority - b.priority)
+              .reduce((map, card) => ({
+                ...map,
+                [card.listId]: [
+                  ...(map[card.listId] || []),
+                  card.id,
+                ],
+              }), {}));
+        });
+
+  }, [orderedLists]);
 
   /**
    * Load the board on first render.
    */
   useEffect(() => {
+    if (user && id) {
+      getBoard();
+      getLists();
+    }
+  }, [user, id, getBoard, getLists]);
 
-    const getBoard = () => {
-      sendRequest(RequestType.GET, '/boards/' + id, null, null, true)
-          .then((response) => {
-            setBoard(response.data.body);
-          });
-    };
-
-    const getLists = () => {
-      Api.getListsForBoard(parseInt(id))
-          .then(lists => {
-            // Adding this property allows us to later prevent dragging on certain interactions
-            lists.forEach(list => list.isDraggable = true);
-            setLists(lists.sort((a, b) => a.priority - b.priority));
-          });
-    };
-
-    if ((user && id) || shouldRefresh) {
+  /**
+   * Refresh the board and list data.
+   */
+  useEffect(() => {
+    if (shouldRefresh) {
       getBoard();
       getLists();
       setShouldRefresh(false);
     }
-  }, [user, id, shouldRefresh]);
+  }, [shouldRefresh, getBoard, getLists, setShouldRefresh]);
 
-  // Updates lists on server side if they have been modified on client side
+  /**
+   * Load the cards after the lists have been retrieved and ordered.
+   */
   useEffect(() => {
-    if (shouldUpdateLists) {
-      sendRequest(RequestType.PUT, '/lists', {boardId: board.id}, {lists: lists}, true)
-          .then(() => setShouldUpdateLists(false));
+    if (Object.keys(cardMap).length === 0 && orderedLists.length > 0
+        && orderedLists.length === Object.keys(listMap).length) {
+      getCards();
     }
-  }, [shouldUpdateLists, lists, board.id]);
+  }, [listMap, orderedLists, cardMap, getCards]);
+
+  /**
+   * Handle when a change was made to orderedLists, as this means the priority for the matching list in listMap needs
+   * to be updated. Also updates lists on server side if they have been modified on client side.
+   */
+  useEffect(() => {
+    let shouldUpdateLists = false;
+
+    if (orderedLists.length > 0 && orderedLists.length === Object.keys(listMap).length) {
+      orderedLists.forEach((listId, i) => {
+        if (listMap[listId].priority !== i) {
+          shouldUpdateLists = true;
+          listMap[listId].priority = i;
+        }
+      });
+
+      // These two need to be kept in sync
+      setListMap(listMap);
+    }
+
+    if (shouldUpdateLists) {
+      sendRequest(RequestType.PUT, '/lists', {boardId: board.id}, {lists: Object.values(listMap)}, true);
+    }
+  }, [orderedLists, listMap, board.id]);
+
+  /**
+   * Handle when a change was made to orderedCards, as this means the priority for the matching card in cardMap needs
+   * to be updated. Also updates cards on server side if they have been modified on client side.
+   */
+  useEffect(() => {
+    const cardsToUpdate = [];
+    const flattenedOrderedCards = Object.values(orderedCards)
+        .flat();
+
+    if (flattenedOrderedCards.length > 0 && flattenedOrderedCards.length === Object.keys(cardMap).length) {
+      Object.keys(orderedCards)
+          .forEach((listId) => {
+            const id = parseInt(listId);
+            orderedCards[id].forEach((cardId, i) => {
+              const card = cardMap[cardId];
+
+              if (card.listId !== id || card.priority !== i) {
+                card.priority = i;
+                card.listId = id;
+                cardsToUpdate.push(card);
+              }
+            });
+          });
+    }
+
+    if (cardsToUpdate.length > 0) {
+      sendRequest(RequestType.PUT, '/cards', null, {cards: cardsToUpdate}, true);
+
+      setCardMap({
+        ...cardMap,
+        ...cardsToUpdate.reduce((map, card) => ({
+          ...map,
+          [card.id]: card,
+        }), {}),
+      });
+    }
+  }, [orderedCards, cardMap]);
 
   /**
    * Reorder the items in a list after an item has moved.
@@ -81,16 +212,36 @@ const BoardContainer = () => {
       return;
     }
 
-    // This just accounts for lists right now and the droppableId for each list will be the same
-    const sourceId = source.droppableId;
-    const destinationId = destination.droppableId;
+    if (result.type === 'LIST') {
+      // If a list was dragged, we reorder them and update the server
+      const reorderedLists = reorder(orderedLists, source.index, destination.index);
+      setOrderedLists(reorderedLists);
+    } else if (result.type === 'CARD') {
+      // If a card was dragged, we update the provider so the list can reorder them and update the server
+      const sourceId = parseInt(source.droppableId.replace('droppable-list-', ''));
+      const destinationId = parseInt(destination.droppableId.replace('droppable-list-', ''));
 
-    // TODO: Add logic for when an item moves to a different droppable element
-    if (sourceId === destinationId) {
-      const reorderedLists = reorder(lists, source.index, destination.index);
-      reorderedLists.forEach((list, i) => list.priority = i);
-      setLists(reorderedLists);
-      setShouldUpdateLists(true);
+      // If the card movement occurred within the same list
+      if (source.droppableId === destination.droppableId) {
+        const reorderedCards = reorder(orderedCards[destinationId], source.index, destination.index);
+        setOrderedCards({
+          ...orderedCards,
+          [destinationId]: reorderedCards,
+        });
+      } else {
+        // If the card movement occurred between two lists
+        const sourceList = Array.from(orderedCards[sourceId]);
+        const destinationList = Array.from(orderedCards[destinationId] || []);
+
+        const [card] = sourceList.splice(source.index, 1);
+        destinationList.splice(destination.index, 0, card);
+
+        setOrderedCards({
+          ...orderedCards,
+          [sourceId]: sourceList,
+          [destinationId]: destinationList,
+        });
+      }
     }
   };
 
@@ -101,6 +252,9 @@ const BoardContainer = () => {
     setIsListFormVisible(!isListFormVisible);
   };
 
+  /**
+   * Refresh the board.
+   */
   const refresh = () => {
     setShouldRefresh(true);
   };
@@ -111,24 +265,29 @@ const BoardContainer = () => {
    * @param list the list to toggle
    */
   const toggleIsListDraggable = list => {
-    let updatedLists = lists.map(l => {
-      if (l.id === list.id) {
-        l.isDraggable = !l.isDraggable;
-      }
+    const listToUpdate = listMap[list.id];
+    listToUpdate.isDraggable = !listToUpdate.isDraggable;
 
-      return l;
+    setListMap({
+      ...listMap,
+      [listToUpdate.id]: listToUpdate,
     });
+  };
 
-    setLists(updatedLists);
+  const functions = {
+    onDragEnd,
+    refresh,
+    toggleIsListDraggable,
+    isListFormVisible,
+    toggleIsListFormVisible,
   };
 
   return <Board board={board}
-                lists={lists}
-                onDragEnd={onDragEnd}
-                isListFormVisible={isListFormVisible}
-                toggleIsListFormVisible={toggleIsListFormVisible}
-                refresh={refresh}
-                toggleIsListDraggable={toggleIsListDraggable}/>;
+                listMap={listMap}
+                orderedLists={orderedLists}
+                cardMap={cardMap}
+                orderedCards={orderedCards}
+                functions={functions}/>;
 
 };
 

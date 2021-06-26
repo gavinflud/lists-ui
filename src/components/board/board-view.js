@@ -6,7 +6,7 @@ import './board-view.scss';
 /**
  * The view for a single board.
  */
-const Board = (props) => {
+const Board = ({board, listMap, orderedLists, cardMap, orderedCards, functions}) => {
 
   /**
    * Context-aware class name for a list.
@@ -21,14 +21,16 @@ const Board = (props) => {
   /**
    * Map a list to a Draggable component
    *
-   * @param list the list to map
+   * @param listId the ID of the list to transform to a draggable
+   * @param index the index of the draggable
    * @returns {JSX.Element} Draggable component created from the list
    */
-  const toDraggable = list => {
+  const toDraggable = (listId, index) => {
+    const list = listMap[listId];
     return (
         <Draggable key={list.id}
                    draggableId={'list-' + list.id}
-                   index={list.priority}
+                   index={index}
                    isDragDisabled={!list.isDraggable}>
           {(provided, snapshot) => (
               <div ref={provided.innerRef}
@@ -36,7 +38,9 @@ const Board = (props) => {
                    {...provided.draggableProps}
                    {...provided.dragHandleProps}>
                 <List list={list}
-                      toggleIsListDraggable={props.toggleIsListDraggable}/>
+                      cardMap={cardMap}
+                      orderedCards={orderedCards}
+                      toggleIsListDraggable={functions.toggleIsListDraggable}/>
               </div>
           )}
         </Draggable>
@@ -45,33 +49,40 @@ const Board = (props) => {
 
   return (
       <section className="section gf-board-view">
-        <h1>{props.board.name}</h1>
+        <h1>{board.name}</h1>
 
-        <DragDropContext onDragEnd={props.onDragEnd}>
-          <Droppable droppableId="droppable-board" direction="horizontal">
+        <DragDropContext onDragEnd={functions.onDragEnd}>
+          <Droppable
+              droppableId="droppable-board"
+              direction="horizontal"
+              type="LIST">
             {(provided, snapshot) => (
                 <div ref={provided.innerRef}
                      className={snapshot.isDraggingOver
                          ? 'gf-lists-container gf-lists-container-dragging'
                          : 'gf-lists-container'}
                      {...provided.droppableProps}>
-                  {props.lists.map(list => toDraggable(list))}
+                  {
+                    orderedLists.length === Object.keys(listMap).length
+                        ? orderedLists.map((listId, i) => toDraggable(listId, i))
+                        : ''
+                  }
 
                   {provided.placeholder}
 
                   <div className="gf-list-draggable gf-list-container-button">
-                    <button onClick={props.toggleIsListFormVisible}>New List</button>
+                    <button onClick={functions.toggleIsListFormVisible}>New List</button>
                   </div>
                 </div>
             )}
           </Droppable>
         </DragDropContext>
 
-        <ListForm isActive={props.isListFormVisible}
-                  onClose={props.toggleIsListFormVisible}
-                  onSuccess={props.refresh}
-                  board={props.board}
-                  nextPriority={props.lists.length}/>
+        <ListForm isActive={functions.isListFormVisible}
+                  onClose={functions.toggleIsListFormVisible}
+                  onSuccess={functions.refresh}
+                  board={board}
+                  nextPriority={orderedLists.length}/>
       </section>
   );
 

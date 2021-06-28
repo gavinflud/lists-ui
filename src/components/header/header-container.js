@@ -1,5 +1,5 @@
 import {useHistory} from 'react-router-dom';
-import {useContext} from 'react';
+import {useContext, useState} from 'react';
 import {AppContext} from '../app/app-context';
 import Header from './header-view';
 
@@ -8,6 +8,7 @@ import Header from './header-view';
  */
 const HeaderContainer = () => {
 
+  const [isBurgerActive, setIsBurgerActive] = useState(false);
   const {user, handleLogout} = useContext(AppContext);
   const history = useHistory();
 
@@ -19,8 +20,17 @@ const HeaderContainer = () => {
     history.push('/');
   };
 
+  /**
+   * Toggles whether the burger dropdown menu is active or not.
+   */
+  const toggleBurgerState = () => {
+    setIsBurgerActive(!isBurgerActive);
+  };
+
   return <Header user={user}
-                 logout={logout}/>;
+                 logout={logout}
+                 isBurgerActive={isBurgerActive}
+                 toggleBurgerState={toggleBurgerState}/>;
 
 };
 

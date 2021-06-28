@@ -7,23 +7,26 @@ import './header.scss';
 /**
  * The header view.
  */
-const Header = (props) => {
+const Header = ({user, logout, isBurgerActive, toggleBurgerState}) => {
   return (
       <header className="gf-header">
         <nav className="navbar is-primary" role="navigation">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item li-logo">Lists</Link>
 
-            <a role="button" className="navbar-burger" aria-expanded="false"
-               data-target="main-navbar">
+            <a role="button"
+               className={isBurgerActive ? 'navbar-burger is-active' : 'navbar-burger'}
+               aria-expanded="false"
+               data-target="main-navbar"
+               onClick={toggleBurgerState}>
               <span aria-hidden="true"/>
               <span aria-hidden="true"/>
               <span aria-hidden="true"/>
             </a>
           </div>
 
-          <div id="main-navbar" className="navbar-menu">
-            {props.user ?
+          <div id="main-navbar" className={isBurgerActive ? 'navbar-menu is-active' : 'navbar-menu'}>
+            {user ?
                 <div className="navbar-start">
                   <Link to="/teams" className="navbar-item">Teams</Link>
                   <Link to="/boards" className="navbar-item">Boards</Link>
@@ -32,19 +35,19 @@ const Header = (props) => {
             }
 
             <div className="navbar-end">
-              {props.user ?
+              {user ?
                   <div className="navbar-item">
                     <Search/>
                   </div> :
                   ''
               }
-              {props.user ?
+              {user ?
                   <div className="navbar-item has-dropdown is-hoverable">
-                    <a className="navbar-link">{props.user.firstName} {props.user.lastName}</a>
+                    <Link to="/" className="navbar-link">{user.firstName} {user.lastName}</Link>
                     <div className="navbar-dropdown is-right">
-                      <a className="navbar-item">Profile</a>
-                      <a className="navbar-item">Preferences</a>
-                      <a className="navbar-item" onClick={props.logout}>Logout</a>
+                      <Link to="/" className="navbar-item">Profile</Link>
+                      <Link to="/" className="navbar-item">Preferences</Link>
+                      <Link to="/" className="navbar-item" onClick={logout}>Logout</Link>
                     </div>
                   </div> :
                   <div className="navbar-item">

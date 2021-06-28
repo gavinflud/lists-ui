@@ -6,9 +6,9 @@ import {useInput} from '../../../utils/hooks/input-hook';
 /**
  * Team form component. This form allows for teams to be created or updated.
  */
-const TeamFormContainer = (props) => {
+const TeamFormContainer = ({isActive, onClose, onSuccess}) => {
 
-  const isModalActive = !!props.isActive;
+  const isModalActive = !!isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
   const name = useInput('');
@@ -31,15 +31,15 @@ const TeamFormContainer = (props) => {
       sendRequest(RequestType.POST, '/teams', null, {name: name.value}, true)
           .then(() => {
             setIsFormSubmitting(false);
-            props.onClose();
-            props.onSuccess();
+            onClose();
+            onSuccess();
           });
     }
-  }, [isFormSubmitting, name.value, props.history]);
+  }, [isFormSubmitting, name, onClose, onSuccess]);
 
   const functions = {
     submitForm: submitForm,
-    onClose: props.onClose,
+    onClose: onClose,
   };
 
   return <TeamForm name={name}

@@ -27,9 +27,9 @@ const BoardList = (props) => {
 
           <aside className="menu">
             <ul className="menu-list">
-              <li><a>Gavin Flood</a></li>
-              <li><a>James Kavanagh</a></li>
-              <li><a>Patrick Bamford</a></li>
+              <li><Link to="/">Gavin Flood</Link></li>
+              <li><Link to="/">James Kavanagh</Link></li>
+              <li><Link to="/">Patrick Bamford</Link></li>
             </ul>
           </aside>
         </div>

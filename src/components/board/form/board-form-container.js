@@ -8,10 +8,10 @@ import Api from '../../../utils/api';
 /**
  * Board form component. This form allows for boards to be created or updated.
  */
-const BoardFormContainer = (props) => {
+const BoardFormContainer = ({isActive, onClose, onSuccess}) => {
 
   const {user} = useContext(AppContext);
-  const isModalActive = !!props.isActive;
+  const isModalActive = !!isActive;
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
@@ -43,7 +43,7 @@ const BoardFormContainer = (props) => {
     if (!team.value && teams.length > 0) {
       team.setValue(teams[0].id);
     }
-  }, [teams]);
+  }, [teams, team]);
 
   /**
    * When the form is submitted, send a create/update request.
@@ -60,15 +60,15 @@ const BoardFormContainer = (props) => {
       }, true)
           .then(() => {
             setIsFormSubmitting(false);
-            props.onClose();
-            props.onSuccess();
+            onClose();
+            onSuccess();
           });
     }
-  }, [isFormSubmitting, name.value, description.value, team.value, props.history]);
+  }, [isFormSubmitting, name.value, description.value, team.value, onClose, onSuccess]);
 
   const functions = {
     submitForm: submitForm,
-    onClose: props.onClose,
+    onClose: onClose,
   };
 
   return <BoardForm name={name}

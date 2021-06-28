@@ -27,7 +27,8 @@ const Team = (props) => {
 
           <aside className="menu">
             <ul className="menu-list">
-              {props.members.map(member => <li key={member.id}><a>{member.firstName} {member.lastName}</a></li>)}
+              {props.members.map(
+                  member => <li key={member.id}><Link to="/">{member.firstName} {member.lastName}</Link></li>)}
             </ul>
           </aside>
         </div>

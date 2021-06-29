@@ -6,19 +6,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: $grey;
+  background: darken($light-grey, 10%);
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.5s ease;
+  max-width: 8em;
+  box-shadow: 0 1px 1px $grey;
 }
 
 .gf-boards-overview-item-container:hover {
   background: $link;
 }
 
+.gf-boards-overview-item-container:hover .gf-reel-item-title {
+  color: $white;
+}
+
 .gf-reel-item-title {
-  font-size: 3rem;
-  text-transform: uppercase;
-  font-weight: bold;
+  font-size: 1em;
+  margin: 0.5em;
+  text-align: center;
+  transition: color 0.5s ease;
 }
 

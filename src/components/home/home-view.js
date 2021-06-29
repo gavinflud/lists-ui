@@ -6,25 +6,25 @@ import './home.scss';
 /**
  * Home view for logged in users.
  */
-const Home = (props) => {
+const Home = ({pinnedBoards, boards, teams, refresh}) => {
 
   return (
       <div className="gf-home-page">
-        <HomeReel title="Recently Viewed"
-                  titleIcon="fa-history"
-                  items={props.recentBoards}/>
+        <HomeReel title="Pinned Boards"
+                  titleIcon="fa-thumbtack"
+                  items={pinnedBoards}/>
 
         <HomeReel title="Teams"
                   titleIcon="fa-users"
                   createForm={TeamForm}
-                  onCreateSuccess={props.refresh}
-                  items={props.teams}/>
+                  onCreateSuccess={refresh}
+                  items={teams}/>
 
         <HomeReel title="Boards"
                   titleIcon="fa-th-list"
                   createForm={BoardForm}
-                  onCreateSuccess={props.refresh}
-                  items={props.boards}/>
+                  onCreateSuccess={refresh}
+                  items={boards}/>
       </div>
   );
 };

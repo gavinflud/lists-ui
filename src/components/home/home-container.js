@@ -15,7 +15,7 @@ const HomeContainer = (props) => {
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [teams, setTeams] = useState([]);
   const [boards, setBoards] = useState([]);
-  const [recentBoards, setRecentBoards] = useState([]);
+  const [pinnedBoards, setPinnedBoards] = useState([]);
 
   /**
    * Fetch all necessary data once the component mounts.
@@ -51,7 +51,7 @@ const HomeContainer = (props) => {
 
   // TODO: This is only temporary until we track board views
   useEffect(() => {
-    setRecentBoards(boards);
+    setPinnedBoards(boards);
   }, [boards]);
 
   const refresh = () => {
@@ -60,7 +60,7 @@ const HomeContainer = (props) => {
 
   // Show a different view depending on if the user is logged in or not
   if (user) {
-    return <Home recentBoards={recentBoards}
+    return <Home pinnedBoards={pinnedBoards}
                  teams={teams}
                  boards={boards}
                  refresh={refresh}/>;

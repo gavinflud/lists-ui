@@ -1,0 +1,42 @@
+@import "../../../index.scss";
+
+.gf-list-form-container {
+  padding: 0 !important;
+  background: none;
+  border-radius: 0;
+}
+
+.gf-list-form-container-button {
+  padding: 5px 10px;
+  background: $light-grey;
+  border-radius: 4px;
+  width: 100%;
+  border: none;
+  font-size: 1em;
+  color: $white;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.5;
+  display: none;
+}
+
+.gf-list-form-container-button-visible {
+  display: inline-block;
+}
+
+.gf-list-form-container-button:hover {
+  background: $link;
+}
+
+.gf-list-form {
+  padding: 0;
+  max-height: 0;
+  display: none;
+  transition: max-height 1s, padding 1s;
+}
+
+.gf-list-form.gf-list-form-visible {
+  padding: 5px 10px;
+  max-height: 100%;
+  display: block;
+}

@@ -6,9 +6,9 @@ import {RequestType, sendRequest} from '../../../utils/http';
 /**
  * List form component. This form allows for lists to be created or updated.
  */
-const ListFormContainer = ({board, nextPriority, isActive, onClose, onSuccess}) => {
+const ListFormContainer = ({board, nextPriority, onSuccess}) => {
 
-  const isModalActive = !!isActive;
+  const [isListFormVisible, setIsListFormVisible] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const previousIsFormSubmittingRef = useRef(isFormSubmitting);
   const name = useInput('');
@@ -16,8 +16,15 @@ const ListFormContainer = ({board, nextPriority, isActive, onClose, onSuccess}) 
   /**
    * Try to create/update the team.
    */
-  const submitForm = () => {
-    setIsFormSubmitting(true);
+  const submitForm = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      setIsFormSubmitting(true);
+    }
+  };
+
+  const toggleIsListFormVisible = () => {
+    setIsListFormVisible(!isListFormVisible);
   };
 
   /**
@@ -43,22 +50,18 @@ const ListFormContainer = ({board, nextPriority, isActive, onClose, onSuccess}) 
       }, true)
           .then(() => {
             setIsFormSubmitting(false);
-            onClose();
+            setIsListFormVisible(false);
             onSuccess();
             reset();
           });
     }
-  }, [isFormSubmitting, name, nextPriority, board, onClose, onSuccess]);
-
-  const functions = {
-    submitForm: submitForm,
-    onClose: onClose,
-  };
+  }, [isFormSubmitting, name, nextPriority, board, onSuccess]);
 
   return <ListForm name={name}
-                   isModalActive={isModalActive}
+                   isListFormVisible={isListFormVisible}
+                   toggleIsListFormVisible={toggleIsListFormVisible}
                    isLoading={isFormSubmitting}
-                   functions={functions}/>;
+                   submitForm={submitForm}/>;
 
 };
 

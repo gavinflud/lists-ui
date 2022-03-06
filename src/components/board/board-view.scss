@@ -22,27 +22,3 @@
   background: darken($light-grey, 10%);
   user-select: none;
 }
-
-.gf-list-container-button {
-  padding: 0;
-  background: none;
-  border-radius: 0;
-}
-
-.gf-list-container-button button {
-  padding: 5px 10px;
-  background: $light-grey;
-  border-radius: 4px;
-  width: 100%;
-  border: none;
-  font-size: 1em;
-  color: $text;
-  cursor: pointer;
-  text-align: left;
-  line-height: 1.5;
-}
-
-.gf-list-container-button button:hover {
-  background: $link;
-  color: white;
-}

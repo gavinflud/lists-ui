@@ -70,19 +70,13 @@ const Board = ({board, listMap, orderedLists, cardMap, orderedCards, functions})
 
                   {provided.placeholder}
 
-                  <div className="gf-list-draggable gf-list-container-button">
-                    <button onClick={functions.toggleIsListFormVisible}>New List</button>
-                  </div>
+                  <ListForm board={board}
+                            onSuccess={functions.refresh}
+                            nextPriority={orderedLists.length}/>
                 </div>
             )}
           </Droppable>
         </DragDropContext>
-
-        <ListForm isActive={functions.isListFormVisible}
-                  onClose={functions.toggleIsListFormVisible}
-                  onSuccess={functions.refresh}
-                  board={board}
-                  nextPriority={orderedLists.length}/>
       </section>
   );
 

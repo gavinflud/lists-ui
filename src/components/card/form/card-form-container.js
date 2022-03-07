@@ -42,10 +42,10 @@ const CardFormContainer = props => {
         priority: nextPriority,
         listId: list.id,
       }, true)
-          .then(() => {
+          .then((response) => {
             setIsFormSubmitting(false);
             props.onClose();
-            props.onSuccess();
+            props.onSuccess(response.data.body);
             reset();
           });
     }

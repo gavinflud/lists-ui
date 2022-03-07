@@ -1,17 +1,17 @@
-import {useParams} from 'react-router-dom';
 import {AppContext} from '../app/app-context';
 import {useCallback, useContext, useEffect, useState} from 'react';
 import {RequestType, sendRequest} from '../../utils/http';
 import Api from '../../utils/api';
 import Board from './board-view';
+import {BoardContext} from './board-context';
 
 /**
  * Container for the board screen.
  */
 const BoardContainer = () => {
 
-  const {id} = useParams();
   const {user} = useContext(AppContext);
+  const {id, cardMap, setCardMap, orderedCards, setOrderedCards} = useContext(BoardContext);
   const [board, setBoard] = useState({name: '', description: ''});
 
   /*
@@ -20,8 +20,6 @@ const BoardContainer = () => {
    */
   const [listMap, setListMap] = useState({});
   const [orderedLists, setOrderedLists] = useState([]);
-  const [cardMap, setCardMap] = useState({});
-  const [orderedCards, setOrderedCards] = useState({});
 
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const [isListFormVisible, setIsListFormVisible] = useState(false);
@@ -90,7 +88,7 @@ const BoardContainer = () => {
               }), {}));
         });
 
-  }, [orderedLists]);
+  }, [orderedLists, setCardMap, setOrderedCards]);
 
   /**
    * Load the board on first render.
@@ -146,44 +144,6 @@ const BoardContainer = () => {
       sendRequest(RequestType.PUT, '/lists', {boardId: board.id}, {lists: Object.values(listMap)}, true);
     }
   }, [orderedLists, listMap, board.id]);
-
-  /**
-   * Handle when a change was made to orderedCards, as this means the priority for the matching card in cardMap needs
-   * to be updated. Also updates cards on server side if they have been modified on client side.
-   */
-  useEffect(() => {
-    const cardsToUpdate = [];
-    const flattenedOrderedCards = Object.values(orderedCards)
-        .flat();
-
-    if (flattenedOrderedCards.length > 0 && flattenedOrderedCards.length === Object.keys(cardMap).length) {
-      Object.keys(orderedCards)
-          .forEach((listId) => {
-            const id = parseInt(listId);
-            orderedCards[id].forEach((cardId, i) => {
-              const card = cardMap[cardId];
-
-              if (card.listId !== id || card.priority !== i) {
-                card.priority = i;
-                card.listId = id;
-                cardsToUpdate.push(card);
-              }
-            });
-          });
-    }
-
-    if (cardsToUpdate.length > 0) {
-      sendRequest(RequestType.PUT, '/cards', null, {cards: cardsToUpdate}, true);
-
-      setCardMap({
-        ...cardMap,
-        ...cardsToUpdate.reduce((map, card) => ({
-          ...map,
-          [card.id]: card,
-        }), {}),
-      });
-    }
-  }, [orderedCards, cardMap]);
 
   /**
    * Reorder the items in a list after an item has moved.

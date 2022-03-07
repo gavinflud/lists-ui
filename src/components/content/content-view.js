@@ -5,6 +5,7 @@ import TeamList from '../team/list/';
 import BoardList from '../board/list/';
 import Board from '../board/';
 import './content.scss';
+import {BoardProvider} from '../board/board-context';
 
 /**
  * Application routing is defined here.
@@ -26,7 +27,9 @@ const Content = (props) => {
             <BoardList/>
           </Route>
           <Route path="/boards/:id">
-            <Board/>
+            <BoardProvider>
+              <Board/>
+            </BoardProvider>
           </Route>
         </Switch>
       </main>

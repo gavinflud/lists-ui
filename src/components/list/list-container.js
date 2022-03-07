@@ -1,6 +1,7 @@
 import List from './list-view';
 import {useContext, useState} from 'react';
 import {AppContext} from '../app/app-context';
+import {BoardContext} from '../board/board-context';
 
 /**
  * Container for the list component.
@@ -8,7 +9,7 @@ import {AppContext} from '../app/app-context';
 const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => {
 
   const {user} = useContext(AppContext);
-  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const {setOrderedCards, setCardMap} = useContext(BoardContext);
   const [isCardFormVisible, setIsCardFormVisible] = useState(false);
 
   /**
@@ -19,8 +20,15 @@ const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => 
     toggleIsListDraggable(list);
   };
 
-  const refresh = () => {
-    setShouldRefresh(true);
+  /**
+   * Called after creating or updating a card.
+   */
+  const onCreateOrUpdate = (card) => {
+    card.isDraggable = true;
+    setCardMap({
+      ...cardMap,
+      [card.id]: card,
+    });
   };
 
   return <List list={list}
@@ -28,7 +36,7 @@ const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => 
                orderedCards={orderedCards}
                isCardFormVisible={isCardFormVisible}
                toggleIsCardFormVisible={toggleIsCardFormVisible}
-               refresh={refresh}/>;
+               onCreateOrUpdate={onCreateOrUpdate}/>;
 
 };
 

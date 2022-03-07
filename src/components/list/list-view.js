@@ -6,7 +6,7 @@ import {Draggable, Droppable} from 'react-beautiful-dnd';
 /**
  * The view for a single list.
  */
-const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormVisible, refresh}) => {
+const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormVisible, onCreateOrUpdate}) => {
 
   const orderedCardsForThisList = orderedCards[list.id] ? orderedCards[list.id] : [];
 
@@ -79,7 +79,7 @@ const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormV
 
         <CardForm isActive={isCardFormVisible}
                   onClose={toggleIsCardFormVisible}
-                  onSuccess={refresh}
+                  onSuccess={onCreateOrUpdate}
                   list={list}
                   nextPriority={orderedCardsForThisList.length}/>
       </div>

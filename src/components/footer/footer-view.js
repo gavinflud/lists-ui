@@ -7,8 +7,8 @@ const Footer = () => {
   return (
       <footer className="footer">
         <div className="content has-text-centered">
-          <p className="has-text-grey-light">Version {version} - Developed by <a className="has-text-grey-light"
-                                                                                 href="https://gavinflood.com">Gavin
+          <p className="has-text-grey-light">v{version} - Built by <a className="has-text-grey-light"
+                                                                      href="https://gavinflood.com">Gavin
             Flood</a></p>
         </div>
       </footer>

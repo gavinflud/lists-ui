@@ -1,6 +1,5 @@
 import List from './list-view';
 import {useContext, useState} from 'react';
-import {AppContext} from '../app/app-context';
 import {BoardContext} from '../board/board-context';
 
 /**
@@ -8,7 +7,6 @@ import {BoardContext} from '../board/board-context';
  */
 const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => {
 
-  const {user} = useContext(AppContext);
   const {setOrderedCards, setCardMap} = useContext(BoardContext);
   const [isCardFormVisible, setIsCardFormVisible] = useState(false);
 

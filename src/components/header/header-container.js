@@ -23,7 +23,8 @@ const HeaderContainer = () => {
   /**
    * Toggles whether the burger dropdown menu is active or not.
    */
-  const toggleBurgerState = () => {
+  const toggleBurgerState = event => {
+    event.preventDefault();
     setIsBurgerActive(!isBurgerActive);
   };
 

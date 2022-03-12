@@ -13,8 +13,13 @@
 
 .gf-card-draggable {
   margin-bottom: 0.5em;
+  cursor: pointer !important;
 }
 
 .gf-list-cards {
   min-height: 0.5em;
+}
+
+.gf-list-draggable {
+  cursor: pointer !important;
 }

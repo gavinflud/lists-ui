@@ -1,5 +1,4 @@
 import {useContext, useEffect, useState} from 'react';
-import {withRouter} from 'react-router-dom';
 import {AppContext} from '../app/app-context';
 import Api from '../../utils/api';
 import Home from './home-view';
@@ -69,4 +68,4 @@ const HomeContainer = (props) => {
   return <HomeUnauthenticated/>;
 };
 
-export default withRouter(HomeContainer);
+export default HomeContainer;

@@ -1,4 +1,4 @@
-import {withRouter} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ReelItem from './reel-item-view';
 
 /**
@@ -6,15 +6,17 @@ import ReelItem from './reel-item-view';
  */
 const ReelItemContainer = (props) => {
 
+  const navigate = useNavigate();
+
   /**
    * Navigate to the item on clicking the tile.
    */
   const onClick = () => {
-    props.history.push(props.link);
+    navigate(props.link);
   };
 
   return <ReelItem title={props.title} onClick={onClick}/>;
 
 };
 
-export default withRouter(ReelItemContainer);
+export default ReelItemContainer;

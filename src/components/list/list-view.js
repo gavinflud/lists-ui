@@ -1,12 +1,12 @@
 import './list-view.scss';
-import CardForm from '../card/form/';
-import Card from '../card/';
+import {CardForm} from '../card/form/CardForm';
+import {Card} from '../card/Card';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
 
 /**
  * The view for a single list.
  */
-const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormVisible, onCreateOrUpdate}) => {
+const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormVisible, onCreateCard}) => {
 
   const orderedCardsForThisList = orderedCards[list.id] ? orderedCards[list.id] : [];
 
@@ -79,8 +79,8 @@ const List = ({list, cardMap, orderedCards, isCardFormVisible, toggleIsCardFormV
 
         <CardForm isActive={isCardFormVisible}
                   onClose={toggleIsCardFormVisible}
-                  onSuccess={onCreateOrUpdate}
-                  list={list}
+                  onSuccess={onCreateCard}
+                  listId={list.id}
                   nextPriority={orderedCardsForThisList.length}/>
       </div>
   );

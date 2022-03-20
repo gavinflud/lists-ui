@@ -7,7 +7,7 @@ import {BoardContext} from '../board/board-context';
  */
 const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => {
 
-  const {setOrderedCards, setCardMap} = useContext(BoardContext);
+  const {setCardMap} = useContext(BoardContext);
   const [isCardFormVisible, setIsCardFormVisible] = useState(false);
 
   /**
@@ -18,10 +18,7 @@ const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => 
     toggleIsListDraggable(list);
   };
 
-  /**
-   * Called after creating or updating a card.
-   */
-  const onCreateOrUpdate = (card) => {
+  const onCreateCard = (card) => {
     card.isDraggable = true;
     setCardMap({
       ...cardMap,
@@ -34,7 +31,7 @@ const ListContainer = ({list, cardMap, orderedCards, toggleIsListDraggable}) => 
                orderedCards={orderedCards}
                isCardFormVisible={isCardFormVisible}
                toggleIsCardFormVisible={toggleIsCardFormVisible}
-               onCreateOrUpdate={onCreateOrUpdate}/>;
+               onCreateCard={onCreateCard}/>;
 
 };
 

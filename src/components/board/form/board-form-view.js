@@ -1,16 +1,15 @@
-import ModalForm from '../../form/modal-form';
+import {ModalForm} from '../../form/modal-form/ModalForm';
 
 /**
  * The form view for creating and editing boards.
  */
 const BoardForm = (props) => {
   return (
-      <ModalForm isModalActive={props.isModalActive}
+      <ModalForm typeLabel="Board"
+                 isCreate={true}
+                 isModalActive={props.isModalActive}
                  isLoading={props.isLoading}
-                 title="Create Board"
-                 submitLabel="Create"
                  onSubmit={props.functions.submitForm}
-                 closeLabel="Cancel"
                  onClose={props.functions.onClose}>
         <div className="field">
           <label className="label">Name</label>

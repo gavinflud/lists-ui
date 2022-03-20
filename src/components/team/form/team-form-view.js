@@ -1,4 +1,4 @@
-import ModalForm from '../../form/modal-form';
+import {ModalForm} from '../../form/modal-form/ModalForm';
 
 /**
  * The form view for creating and editing teams.
@@ -6,12 +6,11 @@ import ModalForm from '../../form/modal-form';
 const TeamForm = (props) => {
 
   return (
-      <ModalForm isModalActive={props.isModalActive}
+      <ModalForm typeLabel="Team"
+                 isCreate={true}
+                 isModalActive={props.isModalActive}
                  isLoading={props.isLoading}
-                 title="Create Team"
-                 submitLabel="Create"
                  onSubmit={props.functions.submitForm}
-                 closeLabel="Cancel"
                  onClose={props.functions.onClose}>
         <div className="field">
           <label className="label">Name</label>

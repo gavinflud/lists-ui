@@ -1,0 +1,36 @@
+@import "../../index.scss";
+
+.gf-card-due-date-button {
+  background: none;
+  border: none;
+  color: lighten($text, 20%);
+  padding: 0.3em;
+  border-radius: 4px;
+}
+
+.gf-card-due-date-button:hover {
+  background: $light-grey;
+  cursor: pointer;
+}
+
+.gf-card-due-date-button-today {
+  background: $warning;
+  color: white;
+}
+
+.gf-card-due-date-button-today:hover {
+  background: darken($warning, 10%);
+}
+
+.gf-card-due-date-button-overdue {
+  background: lighten($danger, 10%);
+  color: white;
+}
+
+.gf-card-due-date-button-overdue:hover {
+  background: $danger;
+}
+
+.gf-card-due-date-button i {
+  margin-right: 0.3em;
+}
